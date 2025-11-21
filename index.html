@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="theme-color" content="#4a90e2">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>Aphasia Communication Helper</title>
+    <link rel="manifest" href="manifest.json">
+    <link rel="apple-touch-icon" href="icon-192.png">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <header>
+        <h1>🗣️ 溝通小幫手</h1>
+        <div id="status-bar">Loading...</div>
+    </header>
+
+    <main>
+        <nav id="category-nav" class="category-nav">
+            <!-- Categories will be injected here -->
+        </nav>
+
+        <div id="grid-container" class="grid-container">
+            <!-- Buttons will be injected here -->
+        </div>
+    </main>
+
+    <div class="speak-bar">
+        <div id="current-text"></div>
+        <button id="play-btn" class="action-btn play" aria-label="Speak">🔊</button>
+        <button id="clear-btn" class="action-btn clear" aria-label="Clear">❌</button>
+    </div>
+
+    <script src="data.js"></script>
+    <script src="script.js"></script>
+</body>
+
+</html>
