@@ -12,13 +12,20 @@ document.addEventListener('DOMContentLoaded', () => {
     // Initialize TTS
     const synth = window.speechSynthesis;
     let voices = [];
+    let preferredVoice = null;
 
     function loadVoices() {
         voices = synth.getVoices();
-        // Try to find a Chinese voice
-        const zhVoice = voices.find(v => v.lang.includes('zh') || v.lang.includes('CN') || v.lang.includes('TW'));
-        if (zhVoice) {
-            statusBar.textContent = `語音就緒: ${zhVoice.name}`;
+
+        // Priority: Google zh-TW > Hanhan > any zh-TW > any zh
+        preferredVoice = voices.find(v => v.name.includes('Google') && v.lang === 'zh-TW') ||
+            voices.find(v => v.name.includes('Hanhan')) ||
+            voices.find(v => v.lang === 'zh-TW') ||
+            voices.find(v => v.lang.includes('zh'));
+
+        if (preferredVoice) {
+            statusBar.textContent = `語音就緒: ${preferredVoice.name}`;
+            console.log('Selected voice:', preferredVoice.name);
         } else {
             statusBar.textContent = '使用預設語音 (可能非中文)';
         }
@@ -55,13 +62,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 <div class="word-icon">${item.icon}</div>
                 <div class="word-label">${item.text}</div>
             `;
-            card.onclick = () => speak(item.text, card);
+            card.onclick = () => speakText(item.text, card);
             gridContainer.appendChild(card);
         });
     }
 
-    // Speak Function
-    function speak(text, element) {
+    // New Speak Function
+    function speakText(text, element) {
         if (synth.speaking) {
             synth.cancel();
         }
@@ -69,11 +76,10 @@ document.addEventListener('DOMContentLoaded', () => {
         currentTextDisplay.textContent = text;
 
         const utterance = new SpeechSynthesisUtterance(text);
-        utterance.lang = 'zh-TW'; // Set language to Traditional Chinese
 
-        // Find best voice again just in case
-        const zhVoice = voices.find(v => v.lang === 'zh-TW') || voices.find(v => v.lang.includes('zh'));
-        if (zhVoice) utterance.voice = zhVoice;
+        if (preferredVoice) {
+            utterance.voice = preferredVoice;
+        }
 
         utterance.rate = 0.9; // Slightly slower
         utterance.pitch = 1.0;
@@ -84,6 +90,10 @@ document.addEventListener('DOMContentLoaded', () => {
             utterance.onend = () => {
                 element.classList.remove('playing');
             };
+            // Handle error case to remove class
+            utterance.onerror = () => {
+                element.classList.remove('playing');
+            };
         }
 
         synth.speak(utterance);
@@ -92,7 +102,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Bottom Bar Actions
     playBtn.onclick = () => {
         const text = currentTextDisplay.textContent;
-        if (text) speak(text);
+        if (text) speakText(text);
     };
 
     clearBtn.onclick = () => {

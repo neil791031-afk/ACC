@@ -1,5 +1,20 @@
 const vocabulary = [
     {
+        id: 'common',
+        name: '常用',
+        items: [
+            { text: '轉台看別的', icon: '📺' },
+            { text: '上廁所', icon: '🚻' },
+            { text: '口渴', icon: '💧' },
+            { text: '喝安素', icon: '🥤' },
+            { text: '吃藥睡覺', icon: '💊🛏️' },
+            { text: '換尿布', icon: '🚼' },
+            { text: '手麻', icon: '✋⚡' },
+            { text: '肩膀痠', icon: '💆' },
+            { text: '進房間休息', icon: '🛌' }
+        ]
+    },
+    {
         id: 'needs',
         name: '生理需求',
         items: [
