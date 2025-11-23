@@ -124,4 +124,29 @@ document.addEventListener('DOMContentLoaded', () => {
                 console.log('ServiceWorker registration failed: ', err);
             });
     }
+
+    // Update Button Logic
+    const updateBtn = document.getElementById('update-btn');
+    if (updateBtn) {
+        updateBtn.onclick = () => {
+            if (confirm('確定要強制更新並重整頁面嗎？')) {
+                if ('serviceWorker' in navigator) {
+                    navigator.serviceWorker.getRegistrations().then(function (registrations) {
+                        for (let registration of registrations) {
+                            registration.unregister();
+                        }
+                        caches.keys().then((keyList) => {
+                            return Promise.all(keyList.map((key) => {
+                                return caches.delete(key);
+                            }));
+                        }).then(() => {
+                            window.location.reload(true);
+                        });
+                    });
+                } else {
+                    window.location.reload(true);
+                }
+            }
+        };
+    }
 });
