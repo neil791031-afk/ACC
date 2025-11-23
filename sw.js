@@ -1,4 +1,4 @@
-const CACHE_NAME = 'aphasia-helper-v1';
+const CACHE_NAME = 'aphasia-helper-v2';
 const ASSETS_TO_CACHE = [
     './',
     './index.html',
